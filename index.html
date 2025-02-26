@@ -3,9 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Entrega 1</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <title>Entrega 2</title>
 </head>
 <body>
+    <section id="section-data">
+        <form id="formulary">
+            <input type="text" id="name" placeholder="Escribe el nombre" required>
+            <input type="number" id="age" placeholder="Escribe la edad" required>
+            <input type="submit" value="Agregar">
+        </form>
+    </section>
+    <section id="section-opcion">
+        <h2 class="tittle">¿Qué desea realizar con los datos?</h2>
+        <div id="section-buttons"></div>
+    </section>
+    <section id="section-result" ></section>
+
     <script src="./js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
 </body>
 </html>
