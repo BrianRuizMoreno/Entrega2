@@ -191,7 +191,7 @@ const resetData = () => {
             dataList.splice(0, dataList.length);
             Swal.fire({
                 position: "center",
-                icon: "sucess",
+                icon: "success",
                 title: 'Lista de datos reiniciada',
                 showConfirmButton: false,
                 timer: 2000,
