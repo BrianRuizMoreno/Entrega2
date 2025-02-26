@@ -189,6 +189,16 @@ const resetData = () => {
     }).then ((result) => {
         if (result.isConfirmed) {
             dataList.splice(0, dataList.length);
+            Swal.fire({
+                position: "center",
+                icon: "sucess",
+                title: 'Lista de datos reiniciada',
+                showConfirmButton: false,
+                timer: 2000,
+                heightAuto: false,   
+                backdrop: 'static',
+                scrollbarPadding: false  
+            });
             localStorage.removeItem('dataList');
             sectionResult.innerHTML = '';
             showData();
