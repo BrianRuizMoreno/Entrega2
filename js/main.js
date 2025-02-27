@@ -82,13 +82,12 @@ const validateData = (data) => {
     return true;
 };
 
-
 const myFormulary = document.getElementById('formulary');
 myFormulary.addEventListener('submit', (e) => {
     e.preventDefault();
     const name = e.target[0].value;
     const age = e.target[1].value;
-
+    //Se crea un objeto con los datos ingresados
     const newData = {
         name,
         age
@@ -99,7 +98,6 @@ myFormulary.addEventListener('submit', (e) => {
     e.target[0].value = '';
     e.target[1].value = '';
 });
-
 
 const sectionResult = document.getElementById('section-result');
 const sectionButtons = document.getElementById('section-buttons'); 
@@ -119,7 +117,7 @@ const tableTitle = () => {
 
     const titleDelete = document.createElement('th');
     titleDelete.innerText = 'Eliminar';
-
+    //Se crean y se añaden los títulos a la tabla
     titleRow.appendChild(titleName);
     titleRow.appendChild(titleAge);
     titleRow.appendChild(titleDelete);
@@ -145,6 +143,7 @@ const createTable = (data) => {
     deleteButton.className = 'delete-button';
     //Se crea una función para eliminar un dato de la lista al hacer click
     deleteButton.onclick = () => {
+        //Se pregunta si esta seguro de eliminar el dato
         Swal.fire({
             position: "center",
             icon: "question",
@@ -166,7 +165,7 @@ const createTable = (data) => {
             }
         });
     };
-
+    //Se añaden los datos a la tabla
     dataRow.appendChild(name);
     dataRow.appendChild(age);
     dataRow.appendChild(deleteButton);
@@ -183,11 +182,11 @@ const createButtons = () => {
 
     const ascButton = document.createElement('button');
     ascButton.innerText = 'Ordenar Ascendente';
-    ascButton.onclick = () => sortDataAsc();
+    ascButton.onclick = () => orderData(true);
 
     const descButton = document.createElement('button');
     descButton.innerText = 'Ordenar Descendente';
-    descButton.onclick = () => sortDataDesc();
+    descButton.onclick = () => orderData(false);
 
     const sortButton = document.createElement('button');
     sortButton.innerText = 'Sortear';
@@ -196,7 +195,7 @@ const createButtons = () => {
     const resetButton = document.createElement('button');
     resetButton.innerText = 'Reiniciar';
     resetButton.onclick = () => resetData();
-
+    //Se añaden los botones al HTML
     buttons.appendChild(ascButton);
     buttons.appendChild(descButton);
     buttons.appendChild(sortButton);
@@ -208,6 +207,7 @@ const createButtons = () => {
 
 //Se crea una función para resetear el localStorage
 const resetData = () => {
+    //Se pregunta si esta seguro de reiniciar los datos
     Swal.fire({
         position: "center",
         icon: "question",
@@ -249,8 +249,9 @@ const showData = () => {
     });
 };
 
-//Se crea una función para ordenar los nombres de forma ascendente
-const sortDataAsc = () => {
+//Se crea una función para ordenar los datos
+const orderData = (order) => {
+    //Se valida que haya datos en la lista
     if(dataList.length === 0) {
         Swal.fire({
             position: "center",
@@ -263,40 +264,12 @@ const sortDataAsc = () => {
             scrollbarPadding: false  
         });
         return;
-    } else {
-        Swal.fire({
-            position: "center",
-            icon: "info",
-            title: '¿Desea ordenar alfabéticamente o por edades?',
-            heightAuto: false,
-            backdrop: 'static',
-            scrollbarPadding: false,
-            showConfirmButton: true,
-            confirmButtonText: 'Alfabéticamente',
-            showCancelButton: true,
-            cancelButtonText: 'Por edades',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                dataList.sort((a, b) => a.name.localeCompare(b.name));
-                showData();
-                localStorage.removeItem('ordenarAscendente');
-            return dataList;
-            } else {
-                dataList.sort((a, b) => a.age - b.age);
-                showData();
-            return dataList;
-            };
-        });
-    }
-};
-
-//Se crea una función para ordenar los nombres de forma descendente
-const sortDataDesc = () => {
-    if(dataList.length === 0) {
+    //Se valida que haya más de un dato en la lista
+    } else if (dataList.length === 1) {
         Swal.fire({
             position: "center",
             icon: "warning",
-            title: 'No hay nombres para ordenar',
+            title: 'Solo hay un nombre en la lista',
             showConfirmButton: false,
             timer: 2000,
             heightAuto: false,   
@@ -304,34 +277,64 @@ const sortDataDesc = () => {
             scrollbarPadding: false  
         });
         return;
-    } else {
-        Swal.fire({
-            position: "center",
-            icon: "info",
-            title: '¿Desea ordenar alfabéticamente o por edades?',
-            heightAuto: false,
-            backdrop: 'static',
-            scrollbarPadding: false,
-            showConfirmButton: true,
-            confirmButtonText: 'Alfabéticamente',
-            showCancelButton: true,
-            cancelButtonText: 'Por edades',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                dataList.sort((a, b) => b.name.localeCompare(a.name));
-                showData();
-            return dataList;
-            } else {
-                dataList.sort((a, b) => b.age - a.age);
-                showData();
-            return dataList;
-            };
-        });
-    }
+    //Se valida si el usuario quiere ordenar ascendente o descendente
+    } else{
+        if (order) {
+            //Se ordena de forma ascendente
+            Swal.fire({
+                position: "center",
+                icon: "info",
+                title: '¿Desea ordenar alfabéticamente o por edades?',
+                heightAuto: false,
+                backdrop: 'static',
+                scrollbarPadding: false,
+                showConfirmButton: true,
+                confirmButtonText: 'Alfabéticamente',
+                showCancelButton: true,
+                cancelButtonText: 'Por edades',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    dataList.sort((a, b) => a.name.localeCompare(b.name));
+                    showData();
+                    localStorage.removeItem('ordenarAscendente');
+                return dataList;
+                } else {
+                    dataList.sort((a, b) => a.age - b.age);
+                    showData();
+                return dataList;
+                };
+            });
+        //Se ordena de forma descendente
+        } else {
+            Swal.fire({
+                position: "center",
+                icon: "info",
+                title: '¿Desea ordenar alfabéticamente o por edades?',
+                heightAuto: false,
+                backdrop: 'static',
+                scrollbarPadding: false,
+                showConfirmButton: true,
+                confirmButtonText: 'Alfabéticamente',
+                showCancelButton: true,
+                cancelButtonText: 'Por edades',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    dataList.sort((a, b) => b.name.localeCompare(a.name));
+                    showData();
+                return dataList;
+                } else {
+                    dataList.sort((a, b) => b.age - a.age);
+                    showData();
+                return dataList;
+                };
+            });
+        }
+    };
 };
 
 //Se crea una función para realizar un sorteo
 const sortData = () => {
+    //Se valida que haya datos en la lista
     if (dataList.length === 0) {
         Swal.fire({
             position: "center",
@@ -342,8 +345,22 @@ const sortData = () => {
             heightAuto: false,   
             backdrop: 'static',
             scrollbarPadding: false  
-        })
+        });
         return;
+    //Se valida que haya más de un dato en la lista
+    } else if (dataList.length === 1) {
+        Swal.fire({
+            position: "center",
+            icon: "error",
+            title: 'No se puede sortear un solo nombre',
+            showConfirmButton: false,
+            timer: 2000,
+            heightAuto: false,   
+            backdrop: 'static',
+            scrollbarPadding: false  
+        });
+        return;
+    //Se realiza un sorteo y se muestra el ganador
     } else {
         const ganador = dataList[Math.floor(Math.random() * dataList.length)];
         Swal.fire({
@@ -358,7 +375,7 @@ const sortData = () => {
         });
         startConfetti();
         return ganador;
-    }
+    };
 };
 
 function startConfetti() {
