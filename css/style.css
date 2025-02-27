@@ -125,3 +125,11 @@ td {
     font-weight: 500;
 }
 
+.delete-button {
+    background: #E74C3C;
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background 0.3s ease;
+}

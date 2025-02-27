@@ -13,15 +13,15 @@ const addNewData = (data) => {
         Swal.fire({
             position: "center",
             icon: "success",
-            title: `El nombre "${data.name}" de "${data.age} ${data.age > 1 ? 'años' : 'año'}" ha sido agregado a la lista.`,
+            title: `El nombre "${data.name}" de ${data.age} ${data.age > 1 ? 'años' : 'año'} ha sido agregado a la lista.`,
             showConfirmButton: false,
             timer: 2500,
             heightAuto: false,   
             backdrop: 'static',
             scrollbarPadding: false  
         });
+    };
 };
-}
 
 //Se crea una función para validar que los datos ingresados no estén vacíos ni repetidos
 const validateData = (data) => {
@@ -117,12 +117,16 @@ const tableTitle = () => {
     const titleAge = document.createElement('th');
     titleAge.innerText = 'Edad';
 
+    const titleDelete = document.createElement('th');
+    titleDelete.innerText = 'Eliminar';
+
     titleRow.appendChild(titleName);
     titleRow.appendChild(titleAge);
+    titleRow.appendChild(titleDelete);
     table.appendChild(titleRow);
 
     sectionResult.appendChild(table);
-}
+};
 
 //Se crea una función para crear la tabla con los datos
 const createTable = (data) => {
@@ -136,11 +140,40 @@ const createTable = (data) => {
     const age = document.createElement('td');
     age.innerText = data.age;
 
-    table.appendChild(name);
-    table.appendChild(age);
+    const deleteButton = document.createElement('td');
+    deleteButton.innerText = 'Eliminar';
+    deleteButton.className = 'delete-button';
+    //Se crea una función para eliminar un dato de la lista al hacer click
+    deleteButton.onclick = () => {
+        Swal.fire({
+            position: "center",
+            icon: "question",
+            title: `¿Está seguro de eliminar "${data.name}" de ${data.age} ${data.age > 1 ? 'años' : 'año'}?`,
+            heightAuto: false,   
+            backdrop: 'static',
+            scrollbarPadding: false,
+            showConfirmButton: true,
+            confirmButtonText: 'Aceptar',
+            showCancelButton: true,
+            cancelButtonText: 'Cancelar',
+        }).then ((result) => {
+            if (result.isConfirmed) {
+                const index = dataList.indexOf(data);
+                dataList.splice(index, 1);
+                localStorage.setItem('dataList', JSON.stringify(dataList));
+                sectionResult.innerHTML = '';  
+                showData();
+            }
+        });
+    };
+
+    dataRow.appendChild(name);
+    dataRow.appendChild(age);
+    dataRow.appendChild(deleteButton);
+    table.appendChild(dataRow);
 
     sectionResult.appendChild(table);
-}
+};
 
 //Se crea una función para añadir botones
 const createButtons = () => {
@@ -204,7 +237,7 @@ const resetData = () => {
             showData();
         }});
             return dataList;
-}
+};
 
 //Se crea una función para mostrar los datos en la tabla
 const showData = () => {
@@ -214,7 +247,7 @@ const showData = () => {
     dataList.forEach(el => {
         createTable(el);
     });
-}
+};
 
 //Se crea una función para ordenar los nombres de forma ascendente
 const sortDataAsc = () => {
@@ -335,7 +368,7 @@ function startConfetti() {
       origin: { y: .3 },
       colors: ['#fee0be', '#5ff9b1', '#ff8f9b', '#eba1ff'],
     });
-  }
+  };
 
 //Se inicializa
 showData();
