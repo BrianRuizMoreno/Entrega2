@@ -11,7 +11,7 @@ const addNewData = (data) => {
         sectionResult.innerHTML = '';
         showData();
         Swal.fire({
-            position: "center",
+            position: "top-end",
             icon: "success",
             title: `El nombre "${data.name}" de ${data.age} ${data.age > 1 ? 'años' : 'año'} ha sido agregado a la lista.`,
             showConfirmButton: false,
@@ -35,32 +35,17 @@ const validateData = (data) => {
 
     data.age = parseInt(data.age, 10);
 
-//Se valida que el usuario haya ingresado un nombre válido
-    if (isNumber) {
+//Se valida que el usuario haya ingresado un nombre válido y la edad este entre 0 y 120
+    if (isNumber || data.age < 0 || data.age > 120) {
         Swal.fire({
             position: "center",
             icon: "warning",
-            title: 'Por favor, ingrese un nombre válido.',
+            title: 'Datos inválidos. Por favor, intente nuevamente.',
             showConfirmButton: false,
             timer: 2000,
             heightAuto: false,   
             backdrop: 'static',
             scrollbarPadding: false  
-        });
-        return false;
-    };
-
-//Se valida que el dato ingresado sea un número entre 0 y 120
-    if (data.age < 0 || data.age > 120) {  
-        Swal.fire({
-            position: "center",
-            icon: "warning",
-            title: 'Por favor, ingrese una edad válida.',
-            showConfirmButton: false,
-            timer: 2000,
-            heightAuto: false,   
-            backdrop: 'static',
-            scrollbarPadding: false 
         });
         return false;
     };
@@ -180,13 +165,9 @@ const createButtons = () => {
     const buttons = document.createElement('div');
     buttons.className = 'buttons-group';
 
-    const ascButton = document.createElement('button');
-    ascButton.innerText = 'Ordenar Ascendente';
-    ascButton.onclick = () => orderData(true);
-
-    const descButton = document.createElement('button');
-    descButton.innerText = 'Ordenar Descendente';
-    descButton.onclick = () => orderData(false);
+    const orderButton = document.createElement('button');
+    orderButton.innerText = 'Ordenar';
+    orderButton.onclick = () => orderData(true);
 
     const sortButton = document.createElement('button');
     sortButton.innerText = 'Sortear';
@@ -196,17 +177,19 @@ const createButtons = () => {
     resetButton.innerText = 'Reiniciar';
     resetButton.onclick = () => resetData();
     //Se añaden los botones al HTML
-    buttons.appendChild(ascButton);
-    buttons.appendChild(descButton);
+    buttons.appendChild(orderButton);
     buttons.appendChild(sortButton);
     buttons.appendChild(resetButton);
 
     sectionButtons.appendChild(buttons);
-};
+    };
 };
 
 //Se crea una función para resetear el localStorage
 const resetData = () => {
+
+    if(errors(dataList)) return;
+
     //Se pregunta si esta seguro de reiniciar los datos
     Swal.fire({
         position: "center",
@@ -223,7 +206,7 @@ const resetData = () => {
         if (result.isConfirmed) {
             dataList.splice(0, dataList.length);
             Swal.fire({
-                position: "center",
+                position: "top-end",
                 icon: "success",
                 title: 'Lista de datos reiniciada',
                 showConfirmButton: false,
@@ -249,119 +232,98 @@ const showData = () => {
     });
 };
 
+//Se crea una función para mostrar cuando haya errores
+const errors = (dataList) => {
+    //Se valida que haya datos en la lista
+    if(!dataList || dataList.length === 0) {
+        Swal.fire({
+            position: "center",
+            icon: "warning",
+            title: 'No hay datos ingresados',
+            showConfirmButton: false,
+            timer: 2000,
+            heightAuto: false,   
+            backdrop: 'static',
+            scrollbarPadding: false  
+        });
+        return true;
+    //Se valida que haya más de un dato en la lista
+    } else if (!dataList || dataList.length === 1) {
+        Swal.fire({
+            position: "center",
+            icon: "warning",
+            title: 'Se necesita más de un dato para realizar esta acción',
+            showConfirmButton: false,
+            timer: 2000,
+            heightAuto: false,   
+            backdrop: 'static',
+            scrollbarPadding: false  
+        });
+        return true;
+    };
+    return false;
+};
+
 //Se crea una función para ordenar los datos
 const orderData = (order) => {
     //Se valida que haya datos en la lista
-    if(dataList.length === 0) {
-        Swal.fire({
-            position: "center",
-            icon: "warning",
-            title: 'No hay nombres para ordenar',
-            showConfirmButton: false,
-            timer: 2000,
-            heightAuto: false,   
-            backdrop: 'static',
-            scrollbarPadding: false  
-        });
-        return;
-    //Se valida que haya más de un dato en la lista
-    } else if (dataList.length === 1) {
-        Swal.fire({
-            position: "center",
-            icon: "warning",
-            title: 'Solo hay un nombre en la lista',
-            showConfirmButton: false,
-            timer: 2000,
-            heightAuto: false,   
-            backdrop: 'static',
-            scrollbarPadding: false  
-        });
-        return;
-    //Se valida si el usuario quiere ordenar ascendente o descendente
-    } else{
-        if (order) {
-            //Se ordena de forma ascendente
-            Swal.fire({
-                position: "center",
-                icon: "info",
-                title: '¿Desea ordenar alfabéticamente o por edades?',
-                heightAuto: false,
-                backdrop: 'static',
-                scrollbarPadding: false,
-                showConfirmButton: true,
-                confirmButtonText: 'Alfabéticamente',
-                showCancelButton: true,
-                cancelButtonText: 'Por edades',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    dataList.sort((a, b) => a.name.localeCompare(b.name));
-                    showData();
-                    localStorage.removeItem('ordenarAscendente');
-                return dataList;
-                } else {
-                    dataList.sort((a, b) => a.age - b.age);
-                    showData();
-                return dataList;
-                };
-            });
-        //Se ordena de forma descendente
-        } else {
-            Swal.fire({
-                position: "center",
-                icon: "info",
-                title: '¿Desea ordenar alfabéticamente o por edades?',
-                heightAuto: false,
-                backdrop: 'static',
-                scrollbarPadding: false,
-                showConfirmButton: true,
-                confirmButtonText: 'Alfabéticamente',
-                showCancelButton: true,
-                cancelButtonText: 'Por edades',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    dataList.sort((a, b) => b.name.localeCompare(a.name));
-                    showData();
-                return dataList;
-                } else {
-                    dataList.sort((a, b) => b.age - a.age);
-                    showData();
-                return dataList;
-                };
-            });
-        }
-    };
-};
+    if(errors(dataList)) return;
 
+     if (order) {
+            Swal.fire({
+                position: "center",
+                icon: "info",
+                title: '¿Cómo desea ordenar los datos?',
+                input: 'select',
+                inputOptions: {
+                    'ascAlf': 'Alfabéticamente de A a Z',
+                    'descAlf': 'Alfabéticamente de Z a A',
+                    'ascEd': 'Por edades de menor a mayor',
+                    'descEd': 'Por edades de mayor a menor',
+                },
+                inputPlaceholder: "Selecciona una opción",
+                heightAuto: false,
+                backdrop: 'static',
+                scrollbarPadding: false,
+                showConfirmButton: true,
+                confirmButtonText: 'Aceptar',
+                showCancelButton: true,
+            }).then((result) => {
+                //Se ordena la lista de datos alfabéticamente
+                    if (result.isConfirmed) {
+                        switch (result.value) {
+                            case 'ascAlf':
+                                //Se ordena de forma alfabeticamente ascendente
+                                dataList.sort((a, b) => a.name.localeCompare(b.name));
+                                break;
+                            case 'descAlf':
+                                //Se ordena de forma alfabeticamente descendente
+                                dataList.sort((a, b) => b.name.localeCompare(a.name));
+                                break;
+                            case 'ascEd':
+                                //Se ordena de forma numericamente ascendente
+                                dataList.sort((a, b) => a.age - b.age);
+                                break;
+                            case 'descEd':
+                                //Se ordena de forma numericamente descendente
+                                dataList.sort((a, b) => b.age - a.age);
+                                break;
+                            default:
+                                Swal.fire('No seleccionaste ninguna opción')
+                                break;
+                        };
+
+                    showData();
+
+                    };
+                });
+            };
+    };
+        
 //Se crea una función para realizar un sorteo
 const sortData = () => {
-    //Se valida que haya datos en la lista
-    if (dataList.length === 0) {
-        Swal.fire({
-            position: "center",
-            icon: "error",
-            title: 'No hay nombres para sortear',
-            showConfirmButton: false,
-            timer: 2000,
-            heightAuto: false,   
-            backdrop: 'static',
-            scrollbarPadding: false  
-        });
-        return;
-    //Se valida que haya más de un dato en la lista
-    } else if (dataList.length === 1) {
-        Swal.fire({
-            position: "center",
-            icon: "error",
-            title: 'No se puede sortear un solo nombre',
-            showConfirmButton: false,
-            timer: 2000,
-            heightAuto: false,   
-            backdrop: 'static',
-            scrollbarPadding: false  
-        });
-        return;
-    //Se realiza un sorteo y se muestra el ganador
-    } else {
+        if(errors(dataList)) return;
+
         const ganador = dataList[Math.floor(Math.random() * dataList.length)];
         Swal.fire({
             position: "center",
@@ -376,7 +338,6 @@ const sortData = () => {
         startConfetti();
         return ganador;
     };
-};
 
 function startConfetti() {
     confetti({
