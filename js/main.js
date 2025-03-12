@@ -205,16 +205,26 @@ const resetData = () => {
     }).then ((result) => {
         if (result.isConfirmed) {
             dataList.splice(0, dataList.length);
+            //Se crea un temporizador para que se reinicien los datos
             Swal.fire({
-                position: "top-end",
-                icon: "success",
-                title: 'Lista de datos reiniciada',
+                position: "center",
+                title: 'Reiniciando...', 
                 showConfirmButton: false,
-                timer: 2000,
-                heightAuto: false,   
-                backdrop: 'static',
-                scrollbarPadding: false  
             });
+
+            setTimeout (() => {
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: 'Lista de datos reiniciada',
+                    showConfirmButton: false,
+                    timer: 2000,
+                    heightAuto: false,   
+                    backdrop: 'static',
+                    scrollbarPadding: false  
+                });
+            },2000)
+            
             localStorage.removeItem('dataList');
             sectionResult.innerHTML = '';
             showData();
@@ -322,22 +332,37 @@ const orderData = (order) => {
         
 //Se crea una función para realizar un sorteo
 const sortData = () => {
-        if(errors(dataList)) return;
+    if(errors(dataList)) return;
 
-        const ganador = dataList[Math.floor(Math.random() * dataList.length)];
+    const winner = dataList[Math.floor(Math.random() * dataList.length)];
+        
+    //Crea una cuenta atrás para mostrar el nombre del ganador
+    let count = 3;
+        
+    const countdown = setInterval(() => {
         Swal.fire({
             position: "center",
-            icon: "success",
-            title: `El nombre ganador es: ${'\n\n' + ganador.name} de ${ganador.age} ${ganador.age > 1 ? 'años' : 'año'}`,
-            heightAuto: false,   
-            backdrop: 'static',
-            scrollbarPadding: false,
-            showConfirmButton: true,
-            confirmButtonText: 'Aceptar',      
+            title: `El nombre ganador se dará en ${count} segundos...`,
+            showConfirmButton: false,
         });
-        startConfetti();
-        return ganador;
-    };
+        count--;
+        if (count === -1) {
+            clearInterval(countdown)
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: `El ganador es: <br> 🎉​🎊​"${winner.name}" de ${winner.age} ${winner.age > 1 ? 'años' : 'año'}🎊🎉​​`,
+                heightAuto: false,   
+                backdrop: 'static',
+                scrollbarPadding: false,
+                showConfirmButton: true,
+                confirmButtonText: 'Aceptar',      
+            });
+            startConfetti();
+            return winner;
+        };
+        }, 1000);
+};
 
 function startConfetti() {
     confetti({
