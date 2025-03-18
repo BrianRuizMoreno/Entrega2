@@ -70,7 +70,7 @@ const validateData = (data) => {
 const myFormulary = document.getElementById('formulary');
 myFormulary.addEventListener('submit', (e) => {
     e.preventDefault();
-    const name = e.target[0].value;
+    const name = e.target[0].value.toUpperCase();
     const age = e.target[1].value;
     //Se crea un objeto con los datos ingresados
     const newData = {
@@ -176,10 +176,15 @@ const createButtons = () => {
     const resetButton = document.createElement('button');
     resetButton.innerText = 'Reiniciar';
     resetButton.onclick = () => resetData();
+    const randomData = document.createElement('button');
+    randomData.innerText = 'Agregar dato aleatorio';
+    randomData.onclick = () => addRandomData();
+    
     //Se añaden los botones al HTML
     buttons.appendChild(orderButton);
     buttons.appendChild(sortButton);
     buttons.appendChild(resetButton);
+    buttons.appendChild(randomData);
 
     sectionButtons.appendChild(buttons);
     };
@@ -208,8 +213,12 @@ const resetData = () => {
             //Se crea un temporizador para que se reinicien los datos
             Swal.fire({
                 position: "center",
-                title: 'Reiniciando...', 
+                title: 'Reiniciando', 
                 showConfirmButton: false,
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
             });
 
             setTimeout (() => {
@@ -363,6 +372,16 @@ const sortData = () => {
         };
         }, 1000);
 };
+
+
+const addRandomData = async = () => {
+    try {
+      
+    } catch (error) {
+        console.error(error);
+    }
+};
+
 
 function startConfetti() {
     confetti({
