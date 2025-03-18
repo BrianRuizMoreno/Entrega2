@@ -10,16 +10,12 @@ const addNewData = (data) => {
         localStorage.setItem('dataList', JSON.stringify(dataList));
         sectionResult.innerHTML = '';
         showData();
-        Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: `El nombre "${data.name}" de ${data.age} ${data.age > 1 ? 'años' : 'año'} ha sido agregado a la lista.`,
-            showConfirmButton: false,
-            timer: 2500,
-            heightAuto: false,   
-            backdrop: 'static',
-            scrollbarPadding: false  
-        });
+        Toastify({
+            text: `El nombre "${data.name}" de ${data.age} ${data.age > 1 ? 'años' : 'año'} ha sido agregado a la lista.`,
+            gravity: "top-right",
+            stopOnFocus: true,
+            duration: 3000,
+        }).showToast();
     };
 };
 
