@@ -58,10 +58,19 @@ const validateData = (data) => {
             backdrop: 'static',
             scrollbarPadding: false  
         });
+        const nameInput = document.getElementById('name');
+        nameInput.focus();
+
         return false;
     };
     return true;
 };
+
+// Añade funcionalidad para el ingreso de dato aleatorio
+document.getElementById('randomData').addEventListener('click', (e) => {
+    e.preventDefault(); 
+    addRandomData(); 
+});
 
 const myFormulary = document.getElementById('formulary');
 myFormulary.addEventListener('submit', (e) => {
@@ -173,14 +182,11 @@ const createButtons = () => {
     resetButton.innerText = 'Reiniciar';
     resetButton.onclick = () => resetData();
     const randomData = document.createElement('button');
-    randomData.innerText = 'Agregar dato aleatorio';
-    randomData.onclick = () => addRandomData();
     
     //Se añaden los botones al HTML
     buttons.appendChild(orderButton);
     buttons.appendChild(sortButton);
-    buttons.appendChild(resetButton);
-    buttons.appendChild(randomData);
+    buttons.appendChild(resetButton)
 
     sectionButtons.appendChild(buttons);
     };
@@ -234,7 +240,7 @@ const resetData = () => {
             sectionResult.innerHTML = '';
             showData();
         }});
-            return dataList;
+        return dataList;
 };
 
 //Se crea una función para mostrar los datos en la tabla
@@ -246,6 +252,9 @@ const showData = () => {
         createTable(el);
     });
 };
+
+//Se inicializa
+showData();
 
 //Se crea una función para mostrar cuando haya errores
 const errors = (dataList) => {
@@ -369,12 +378,42 @@ const sortData = () => {
         }, 1000);
 };
 
+//Se crea una instancia API
+const api = axios.create({
+    baseURL: 'https://randomuser.me/api/',
+    timeout: 5000,
+    headers: {
+        'Content-Type': 'application/json',
+    },
+});
 
-const addRandomData = async = () => {
+//Se crea una función para añadir nombres aleatorios mediante una API
+const addRandomData = async () => {
     try {
-      
+        const response = await api.get('?nat=es');
+        const randomDataArray = response.data.results;
+
+        const randomData = randomDataArray[0];
+
+        if (!randomData || !randomData.name || !randomData.dob) {
+            throw new Error('Datos inválidos recibidos de la API');
+        }
+
+        const newData = {
+            name: randomData.name.first.toUpperCase(),
+            age: randomData.dob.age,
+        };
+
+        addNewData(newData);
+
     } catch (error) {
-        console.error(error);
+        console.error('Error al obtener datos aleatorios:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error al obtener datos',
+            text: 'No se pudo obtener un dato aleatorio. Intente de nuevo más tarde.',
+            confirmButtonText: 'Aceptar',
+        });
     }
 };
 
@@ -387,7 +426,3 @@ function startConfetti() {
       colors: ['#fee0be', '#5ff9b1', '#ff8f9b', '#eba1ff'],
     });
   };
-
-//Se inicializa
-showData();
-
