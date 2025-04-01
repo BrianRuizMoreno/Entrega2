@@ -1,35 +1,89 @@
-🎲 Sorteador de Nombres 🎲
+🎉 Proyecto de Lista Dinámica con Sorteo 🎉
 
+📌 Descripción
 
-Este es un programa interactivo que permite al usuario ingresar nombres y edades, ambos datos son obligatoriamente,
-y luego realizar diferentes acciones con ellos, como ordenarlos o realizar un sorteo.
+Este proyecto es una aplicación web que permite a los usuarios ingresar nombres y edades en una lista, ordenarlos, realizar sorteos y gestionar los datos de manera dinámica. Se almacena la información en el localStorage y se proporciona una interfaz intuitiva con notificaciones y alertas atractivas.
 
+🚀 Características
 
-✨ Características ✨
+✅ Agregar nombres y edades de manera dinámica.
+✅ Validación de datos para evitar entradas incorrectas o repetidas.
+✅ Almacenamiento en localStorage para persistencia de datos.
+✅ Ordenación alfabética y por edad (ascendente y descendente).
+✅ Sorteo aleatorio de un ganador entre los participantes.
+✅ Eliminación individual de datos con confirmación.
+✅ Resetear la lista completa con mensaje de advertencia.
+✅ Generación de nombres aleatorios mediante una API.
+✅ Notificaciones visuales atractivas con SweetAlert2 y Toastify.
+✅ Animación de confeti para el sorteo ganador.
 
-✅ Permite ingresar nombres y edaddes de manera iterativa.
-✅ Ofrece un menú con las siguientes opciones:
+🎯 Tecnologías Utilizadas
 
-📌 Ordenar los nombres o las edades en orden ascendente.
+JavaScript Vanilla para la lógica principal
 
-📌 Ordenar los nombres o las eadades en orden descendente.
+HTML5 y CSS3 para la estructura y diseño
 
-🎰 Realizar un sorteo aleatorio entre los nombres ingresados.
+localStorage para el almacenamiento de datos
 
-➕ Agregar más nombres siempre que se desee.
+SweetAlert2 para alertas interactivas
 
-↻ Resetear la lista.
+Toastify para notificaciones emergentes
 
-✅ Muestra los resultados según la opción elegida y permite seguir interactuando.
-✅ Visualiza animaciones en todo momento.
-✅ Animación de confetti al seleccionar un ganador en el sorteo.
+Axios para consumo de API externa
 
+RandomUser API para generar nombres aleatorios
 
-🎮 Uso 🎮
+Confetti.js para efectos visuales de celebración
 
-1️⃣ El programa solicitará al usuario que ingrese nombres y edades.
-2️⃣ Los nombres se irán cargando dinámicamente en una tabla que se visualizará en pantalla.
-3️⃣ Cuando el usuario desee, podrá optar por realizar un sorteo, ordenar desencentemente o ascendentemente de forma alfabética o por edades o resetear la lista.
-4️⃣ Dependiendo de la selección del usuario, se ejecutará la acción correspondiente.
-5️⃣ El usuario podrá seguir cargando datos o realizar las acciones que desee.
+🛠️ Instalación y Uso
 
+Descarga o clona este repositorio.
+
+Abre el archivo index.html en tu navegador preferido.
+
+O ingresa desde el siguiente enlace: https://brianruizmoreno.github.io/EntregaFinal/
+
+Interacciona con la aplicación agregando nombres, ordenando y sorteando.
+
+🔍 Funciones Principales
+
+  📥 Agregar Datos
+  
+  ✅ Validación de Datos
+  
+  Se verifica:
+  
+  ◆ Que el nombre contenga solo letras y espacios.
+  
+  ◆ Que la edad esté entre 0 y 120.
+  
+  ◆ Que el dato no esté repetido en la lista.
+  
+  📋 Mostrar Datos
+  
+  🗑️ Eliminar Datos
+  
+  🔄 Resetear Datos
+  
+  📌 Ordenar Datos
+  
+  Se podrán ordenar los datos según selección del usuario:
+  
+  ◆ Alfabéticamente (A-Z / Z-A)
+  
+  ◆ Numéricamente por edad (menor a mayor / mayor a menor)
+  
+  🎲 Realizar Sorteo
+  
+  🔄 Generar Datos Aleatorios
+  
+
+📜 Licencia
+
+Este proyecto es de código abierto y está disponible bajo la licencia MIT.
+
+💡 Autor
+
+📌 Desarrollado por: Brian Ruiz Moreno
+
+🌟 ¡Si te gustó este proyecto, no olvides darle una estrella ⭐ en GitHub! 🌟
